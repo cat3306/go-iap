@@ -1,4 +1,4 @@
-//go:generate mockgen  -destination=mocks/appstore.go -package=mocks github.com/awa/go-iap/appstore IAPClient
+//go:generate mockgen  -destination=mocks/appstore.go -package=mocks github.com/cat3306/go-iap/appstore IAPClient
 
 package appstore
 
