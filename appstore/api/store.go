@@ -104,22 +104,25 @@ type StoreClient struct {
 func NewStoreClient(config *StoreConfig) *StoreClient {
 	token := &Token{}
 	token.WithConfig(config)
-	var transport *http.Transport
+	timeout := 30 * time.Second
+	httpCli := &http.Client{
+		Timeout: timeout,
+	}
 	if config.ProxyUrl != "" {
 		proxy, err := url.Parse(config.ProxyUrl)
 		if err == nil {
-			transport = &http.Transport{
-				Proxy: http.ProxyURL(proxy),
+			httpCli = &http.Client{
+				Timeout: timeout,
+				Transport: &http.Transport{
+					Proxy: http.ProxyURL(proxy),
+				},
 			}
 		}
 	}
 	client := &StoreClient{
-		Token: token,
-		cert:  &Cert{},
-		httpCli: &http.Client{
-			Timeout:   30 * time.Second,
-			Transport: transport,
-		},
+		Token:   token,
+		cert:    &Cert{},
+		httpCli: httpCli,
 	}
 	return client
 }
